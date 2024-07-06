@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Basic App</title>
+  <style>
+    body {
+      background-color: #9556eb;
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- Include the latest version of Three.js from a CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    var camera, scene, renderer;
+    var icosahedron, cube, cylinder;
+
+    init();
+    animate();
+
+    function init() {
+      // Create a WebGLRenderer instead of a CanvasRenderer
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+      camera.position.z = 400;
+
+      scene = new THREE.Scene();
+
+      // Create an icosahedron
+      var icosahedronGeometry = new THREE.IcosahedronGeometry(100, 1);
+      var icosahedronMaterial = new THREE.MeshBasicMaterial({
+        color: 0xff3399,
+        wireframe: true,
+        wireframeLinewidth: 3
+        
+      });
+
+      icosahedron = new THREE.Mesh(icosahedronGeometry, icosahedronMaterial);
+      scene.add(icosahedron);
+
+      // Create a cube
+      var cubeGeometry = new THREE.BoxGeometry(100, 100, 100);
+      var cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+      cube.position.set(400, 0, 0);
+      scene.add(cube);
+
+      // Create a cylinder
+      var cylinderGeometry = new THREE.CylinderGeometry(50, 50, 100, 32);
+      var cylinderMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+      cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+      cylinder.position.set(-400, 0, 0);
+      scene.add(cylinder);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Apply individual rotations to each geometry
+      icosahedron.rotation.x += 0.03;
+      icosahedron.rotation.y += 0.02;
+
+      cube.rotation.x += 0.02;
+      cube.rotation.y += 0.03;
+
+      cylinder.rotation.x += 0.01;
+      cylinder.rotation.y += 0.04;
+
+      renderer.render(scene, camera);
+    }
+
+    // Handle window resize
+    window.addEventListener('resize', function () {
+      var newWidth = window.innerWidth;
+      var newHeight = window.innerHeight;
+
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(newWidth, newHeight);
+    });
+
+  </script>
+</body>
+</html>
